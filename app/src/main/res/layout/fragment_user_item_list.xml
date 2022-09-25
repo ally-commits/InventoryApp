@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserItemList">
+
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:scrollbarThumbHorizontal="@color/white"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <Button
+                android:layout_width="wrap_content"
+                android:text="Stationary Items"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_height="40dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:text="Books"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"
+                android:layout_height="40dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:text="Note"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"
+                android:layout_height="40dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:text="Paper"
+                android:layout_gravity="center"
+                android:textColor="@color/white" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:text="Pen"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"
+                android:layout_height="40dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Pen Box (10 Pens)"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="IN STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/green"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Pencil Box (10 Pencils)"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="OUT OF STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/red"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:enabled="false"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="A4 Sheet (500 Sheets)"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="IN STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/green"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="White Chalk Box Pack of 200"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="IN STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/green"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Color Chalk Box Pack of 200"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="OUT OF STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/red"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:enabled="false"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/backgroundshadow"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:layout_height="120dp" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Rulled Book 100 Pages"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:text="IN STOCK"
+                        android:textSize="16dp"
+                        android:textColor="@color/green"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add To Cart"
+                        android:onClick="redirectToCartPage"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</FrameLayout>
