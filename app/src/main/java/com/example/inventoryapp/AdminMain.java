@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,12 +18,21 @@ public class AdminMain extends AppCompatActivity  implements NavigationView.OnNa
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    DataBaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
+        db = new DataBaseHelper(getApplicationContext());
         setLayoutTitle("Admin Dashboard");
+
+        //LOGIN AUTHENTICATE CODE
+        SharedPreferences sh = getSharedPreferences("userId",MODE_PRIVATE);
+        int userId = sh.getInt("userId",-1);
+        if(userId < 0) {
+            redirectToLogin();
+        }
 
         drawerLayout = findViewById(R.id.drawer);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -75,6 +85,9 @@ public class AdminMain extends AppCompatActivity  implements NavigationView.OnNa
                 setLayoutTitle("Category List");
                 break;
             case R.id.nav_logout:
+                SharedPreferences sn = getSharedPreferences("userId", MODE_PRIVATE);
+                sn.edit().remove("userId").commit();
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 break;
@@ -84,16 +97,26 @@ public class AdminMain extends AppCompatActivity  implements NavigationView.OnNa
         return true;
     }
 
-    public void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment,String ...names) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(names.length > 1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("type", names[0]);
+            bundle.putString("id", names[1]);
+            fragment.setArguments(bundle);
+        }
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.addToBackStack(fragment.toString());
+
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
 
-    public void redirectToCartPage() {
-        loadFragment(new UserCartFragment());
+    public void redirectToLogin() {
+        Intent intent = new Intent(getApplicationContext(), AdminLogin.class);
+        startActivity(intent);
     }
 }

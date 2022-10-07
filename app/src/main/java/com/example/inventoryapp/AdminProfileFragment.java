@@ -1,5 +1,7 @@
 package com.example.inventoryapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,7 @@ public class AdminProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    DataBaseHelper db;
 
     public AdminProfileFragment() {
         // Required empty public constructor
@@ -53,12 +60,46 @@ public class AdminProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_profile, container, false);
+        SharedPreferences sh = this.getActivity().getSharedPreferences("userId", Context.MODE_PRIVATE);
+        int userId = sh.getInt("userId",-1);
+
+        ModelUser user = db.getUser(userId);
+
+        View v = inflater.inflate(R.layout.fragment_admin_profile, container, false);
+
+        TextView userIdV = v.findViewById(R.id.userId);
+        EditText nameV = v.findViewById(R.id.nameField);
+        EditText phoneNumberV = v.findViewById(R.id.phoneNumberField);
+        EditText passwordV = v.findViewById(R.id.passwordField);
+
+        userIdV.setText("ADMIN ID:" + String.valueOf(user.getId()));
+        nameV.setText(user.getName());
+        phoneNumberV.setText(user.getPhoneNumber());
+        passwordV.setText(user.getPassword());
+
+        Button btnUpdate = v.findViewById(R.id.updateBtn);
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.updateUser(new ModelUser(
+                    user.getId(),
+                    nameV.getText().toString(),
+                    phoneNumberV.getText().toString(),
+                    passwordV.getText().toString(),
+                    "ADMIN"
+                ));
+
+                Toast.makeText(getContext(), "Admin Profile Updated", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return v;
     }
 }

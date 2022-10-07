@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,10 +18,24 @@ public class UserMain extends AppCompatActivity  implements NavigationView.OnNav
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    DataBaseHelper db;
+    int activeUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
+        db = new DataBaseHelper(getApplicationContext());
+
+        setLayoutTitle("User Dashboard");
+
+        SharedPreferences sh = getSharedPreferences("userId",MODE_PRIVATE);
+        int userId = sh.getInt("userId",-1);
+        if(userId < 0) {
+            redirectToLogin();
+        } else {
+            activeUserId = userId;
+        }
 
         drawerLayout = findViewById(R.id.drawer);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -33,6 +48,10 @@ public class UserMain extends AppCompatActivity  implements NavigationView.OnNav
         navView.setNavigationItemSelectedListener(this);
 
         loadFragment(new UserLandingFragment());
+    }
+
+    public void setLayoutTitle(String layoutTitle) {
+        this.setTitle(layoutTitle);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -62,6 +81,9 @@ public class UserMain extends AppCompatActivity  implements NavigationView.OnNav
                 loadFragment(new UserCartFragment());
                 break;
             case R.id.nav_logout:
+                SharedPreferences sn = getSharedPreferences("userId", MODE_PRIVATE);
+                sn.edit().remove("userId").commit();
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 break;
@@ -80,7 +102,11 @@ public class UserMain extends AppCompatActivity  implements NavigationView.OnNav
         fragmentTransaction.commit();
     }
 
-    public void redirectToCartPage() {
-        loadFragment(new UserCartFragment());
+    public void redirectToLogin() {
+        Intent intent = new Intent(getApplicationContext(), AdminLogin.class);
+        startActivity(intent);
+    }
+    public int getActiveUserId() {
+        return activeUserId;
     }
 }

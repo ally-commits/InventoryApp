@@ -4,10 +4,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +29,9 @@ public class AdminCategoryConfFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    DataBaseHelper db;
+
+
 
     public AdminCategoryConfFragment() {
         // Required empty public constructor
@@ -54,21 +62,48 @@ public class AdminCategoryConfFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
     }
 
+
+    String type = "NONE";
+    int id = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        if(getArguments() != null) {
+            type = getArguments().getString("type");
+            id = Integer.valueOf(getArguments().getString("id"));
+        }
+
         View view =  inflater.inflate(R.layout.fragment_admin_category_conf, container, false);
         Button btn = (Button) view.findViewById(R.id.add_category);
+        TextView nameField = (TextView) view.findViewById(R.id.nameField);
+        TextView headText = (TextView) view.findViewById(R.id.headText);
+
+        if(type.equals("EDIT")) {
+            headText.setText("Edit Category");
+            btn.setText("Edit Category");
+            ModelCategory cat = db.getCategory(id);
+            nameField.setText(cat.getName());
+        }
+
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(type.equals("EDIT")) {
+                    db.updateCategory(new ModelCategory(id,nameField.getText().toString()));
+                } else {
+                    db.addCategory(new ModelCategory(nameField.getText().toString()));
+                }
+                AdminCategoryList.getInstance().showRecords();
                 ((AdminMain) getActivity()).loadFragment(new AdminCategoryList());
             }
         });
         return view;
     }
+
+
 }

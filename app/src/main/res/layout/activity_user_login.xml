@@ -26,6 +26,7 @@
         android:textSize="16dp"
         android:text="Enter Phone Number" />
     <EditText
+        android:id="@+id/phoneNumber"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginHorizontal="20dp"
@@ -41,16 +42,18 @@
         android:textSize="16dp"
         android:text="Enter Password" />
     <EditText
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
         />
 
     <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="20dp"
         android:text="Login"
-        android:onClick="redirectUserLanding"
+
         />
 </LinearLayout>

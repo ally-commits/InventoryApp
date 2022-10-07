@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +28,9 @@ public class AdminItemListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    DataBaseHelper db;
+    private static AdminItemListFragment instance = null;
 
     public AdminItemListFragment() {
         // Required empty public constructor
@@ -47,7 +53,9 @@ public class AdminItemListFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    public static AdminItemListFragment getInstance() {
+        return instance;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +63,19 @@ public class AdminItemListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
+        instance = this;
     }
+
+    ListView listView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_admin_item_list, container, false);
         Button btn = (Button) view.findViewById(R.id.add_item);
-
+        listView = (ListView) view.findViewById(R.id.listView);
+        showRecords();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,5 +83,10 @@ public class AdminItemListFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void showRecords() {
+        ArrayList<ModelProduct> itemList = db.getAllProducts();
+        listView.setAdapter(new ListAdapterProductAdmin(getActivity().getApplicationContext() ,itemList, getActivity()));
     }
 }

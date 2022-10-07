@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +26,8 @@ public class AdminConfUserFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    DataBaseHelper db;
 
     public AdminConfUserFragment() {
         // Required empty public constructor
@@ -54,17 +58,59 @@ public class AdminConfUserFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
     }
 
+    String type = "NONE";
+    int id = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if(getArguments() != null) {
+            type = getArguments().getString("type");
+            id = Integer.valueOf(getArguments().getString("id"));
+        }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_conf_user, container, false);
         Button btn = (Button) view.findViewById(R.id.add_user);
+
+        TextView headText = (TextView) view.findViewById(R.id.headText);
+
+        EditText nameF = (EditText) view.findViewById(R.id.nameField);
+        EditText phoneF = (EditText) view.findViewById(R.id.phoneNumberField);
+        EditText passwordF = (EditText) view.findViewById(R.id.passwordField);
+
+        if(type.equals("EDIT")) {
+            headText.setText("Edit User");
+            btn.setText("Edit User");
+            ModelUser user = db.getUser(id);
+            nameF.setText(user.getName());
+            phoneF.setText(user.getPhoneNumber());
+            passwordF.setText(user.getPassword());
+        }
+
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(type.equals("EDIT")) {
+                    db.updateUser(new ModelUser(
+                            id,
+                            nameF.getText().toString(),
+                            phoneF.getText().toString(),
+                            passwordF.getText().toString(),
+                            "USER"
+                    ));
+                } else {
+                    db.addUser(new ModelUser(
+                            nameF.getText().toString(),
+                            phoneF.getText().toString(),
+                            passwordF.getText().toString(),
+                            "USER"
+                    ));
+                }
+                AdminUserListFragment.getInstance().showRecords();
                 ((AdminMain) getActivity()).loadFragment(new AdminUserListFragment());
             }
         });

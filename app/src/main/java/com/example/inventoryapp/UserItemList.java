@@ -9,6 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +32,10 @@ public class UserItemList extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    DataBaseHelper db;
+    private static UserItemList instance = null;
+
+
     public UserItemList() {
         // Required empty public constructor
     }
@@ -40,6 +50,9 @@ public class UserItemList extends Fragment {
         return fragment;
     }
 
+    public static UserItemList getInstance() {
+        return instance;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +60,57 @@ public class UserItemList extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
+        instance = this;
     }
 
+    ListView listView;
+    LinearLayout bottomLayout;
+    TextView cartCountView;
+    Button goToCart;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_user_item_list, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_user_item_list, container, false);
+        listView = v.findViewById(R.id.listView);
+        bottomLayout = v.findViewById(R.id.bottomLayout);
+        cartCountView = v.findViewById(R.id.cartCount);
+        goToCart = v.findViewById(R.id.goToCart);
+
+        goToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((UserMain)getActivity()).loadFragment(new UserCartFragment());
+            }
+        });
+
+        showRecords();
+        return v;
     }
 
+    public int dpToPx(int dp) {
+        float scale =  getContext().getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 
+    public void showRecords() {
+        int userId = ((UserMain)getActivity()).getActiveUserId();
 
+        int cartCount = db.getCartItemsCount(userId);
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
+        if(cartCount > 0) {
+            cartCountView.setText( cartCount + " ITEM");
+            bottomLayout.setVisibility(LinearLayout.VISIBLE);
+            layoutParams.setMargins(0,dpToPx(60),0,dpToPx(80));
+        } else {
+            bottomLayout.setVisibility(LinearLayout.INVISIBLE);
+            layoutParams.setMargins(0,dpToPx(60),0,dpToPx(0));
+        }
 
-    public void redirectToCartPage() {
-        ((UserMain)getActivity()).loadFragment(new UserCartFragment());
+        listView.setLayoutParams(layoutParams);
+
+        ArrayList<ModelProduct> itemList = db.getAllProductForUser(userId);
+        listView.setAdapter(new ListAdapterProductUser(getActivity().getApplicationContext() ,itemList, getActivity()));
     }
 }
