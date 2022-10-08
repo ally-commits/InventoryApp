@@ -68,6 +68,7 @@ public class UserItemList extends Fragment {
     LinearLayout bottomLayout;
     TextView cartCountView;
     Button goToCart;
+    LinearLayout notFound;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class UserItemList extends Fragment {
         bottomLayout = v.findViewById(R.id.bottomLayout);
         cartCountView = v.findViewById(R.id.cartCount);
         goToCart = v.findViewById(R.id.goToCart);
+        notFound = v.findViewById(R.id.notFound);
 
         goToCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +95,8 @@ public class UserItemList extends Fragment {
         float scale =  getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
+
+
 
     public void showRecords() {
         int userId = ((UserMain)getActivity()).getActiveUserId();
@@ -111,6 +115,11 @@ public class UserItemList extends Fragment {
         listView.setLayoutParams(layoutParams);
 
         ArrayList<ModelProduct> itemList = db.getAllProductForUser(userId);
-        listView.setAdapter(new ListAdapterProductUser(getActivity().getApplicationContext() ,itemList, getActivity()));
+        if(itemList.size() == 0) {
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            listView.setAdapter(new ListAdapterProductUser(getActivity().getApplicationContext() ,itemList, getActivity()));
+        }
     }
 }

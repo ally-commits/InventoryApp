@@ -7,6 +7,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +28,8 @@ public class UserLandingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    DataBaseHelper db;
 
     public UserLandingFragment() {
         // Required empty public constructor
@@ -53,12 +60,24 @@ public class UserLandingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_landing, container, false);
+        int userId = ((UserMain)getActivity()).getActiveUserId();
+        View v = inflater.inflate(R.layout.fragment_user_landing, container, false);
+        TextView approved = v.findViewById(R.id.approved);
+        TextView rejected = v.findViewById(R.id.rejected);
+        TextView pending = v.findViewById(R.id.pending);
+
+        ArrayList<Integer> arr = db.getUserDashboard(userId);
+        pending.setText(String.valueOf(arr.get(0)));
+        approved.setText(String.valueOf(arr.get(1)));
+        rejected.setText(String.valueOf(arr.get(2)));
+
+        return v;
     }
 }

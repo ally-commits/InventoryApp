@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class ListAdapterProductUser extends BaseAdapter {
             holder.addToCart.setText("Added");
             holder.addToCart.setEnabled(false);
             holder.addToCart.getBackground().setAlpha((int) 50);
+        }
+        if(Integer.valueOf(listData.get(position).getStockLeft()) <= 0) {
+            holder.addToCart.setVisibility(LinearLayout.INVISIBLE);
         }
 
         holder.addToCart.setOnClickListener(new View.OnClickListener() {

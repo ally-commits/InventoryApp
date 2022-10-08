@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class AdminItemListFragment extends Fragment {
     }
 
     ListView listView;
+    LinearLayout notFound;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class AdminItemListFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_admin_item_list, container, false);
         Button btn = (Button) view.findViewById(R.id.add_item);
         listView = (ListView) view.findViewById(R.id.listView);
+        notFound = view.findViewById(R.id.notFound);
         showRecords();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +90,11 @@ public class AdminItemListFragment extends Fragment {
 
     public void showRecords() {
         ArrayList<ModelProduct> itemList = db.getAllProducts();
-        listView.setAdapter(new ListAdapterProductAdmin(getActivity().getApplicationContext() ,itemList, getActivity()));
+        if(itemList.size() == 0) {
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            listView.setAdapter(new ListAdapterProductAdmin(getActivity().getApplicationContext() ,itemList, getActivity()));
+        }
     }
 }

@@ -7,6 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,9 @@ public class UserCartFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    DataBaseHelper db;
+    private static UserCartFragment instance = null;
 
     public UserCartFragment() {
         // Required empty public constructor
@@ -46,6 +55,9 @@ public class UserCartFragment extends Fragment {
         return fragment;
     }
 
+    public static UserCartFragment getInstance() {
+        return instance;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +65,45 @@ public class UserCartFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
+        instance = this;
     }
 
+    ListView listView;
+    Button placeOrder;
+    LinearLayout notFound;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_cart, container, false);
+        int userId = ((UserMain)getActivity()).getActiveUserId();
+        View v =  inflater.inflate(R.layout.fragment_user_cart, container, false);
+        listView = v.findViewById(R.id.listView);
+        placeOrder = v.findViewById(R.id.placeOrder);
+        notFound = v.findViewById(R.id.notFound);
+
+        placeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.placeOrder(userId);
+                Toast.makeText(getContext(), "Order Placed Successfully", Toast.LENGTH_SHORT).show();
+                ((UserMain)getActivity()).loadFragment(new UserOrderListFragment());
+            }
+        });
+        showRecords();
+        return v;
+    }
+    public void showRecords() {
+        int userId = ((UserMain)getActivity()).getActiveUserId();
+        int cartCount = db.getCartItemsCount(userId);
+        if(cartCount == 0) {
+            placeOrder.setVisibility(LinearLayout.GONE);
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            placeOrder.setVisibility(LinearLayout.VISIBLE);
+        }
+
+        ArrayList<ModelProduct> cartList = db.getAllCartItems(userId);
+        listView.setAdapter(new ListAdapterCartUser(getActivity().getApplicationContext() ,cartList, getActivity()));
     }
 }

@@ -25,6 +25,28 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/notFound"
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:background="@drawable/notfound"
+            android:layout_height="150dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:text="No Data Found"
+            android:textSize="18dp"
+            />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

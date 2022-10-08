@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class AdminUserListFragment extends Fragment {
         instance = this;
     }
     ListView listView;
+    LinearLayout notFound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +69,7 @@ public class AdminUserListFragment extends Fragment {
         Button btn = (Button) view.findViewById(R.id.add_user);
 
         listView = (ListView) view.findViewById(R.id.listView);
+        notFound = view.findViewById(R.id.notFound);
 
         showRecords();
 
@@ -80,6 +83,11 @@ public class AdminUserListFragment extends Fragment {
     }
     public void showRecords() {
         ArrayList<ModelUser> userList = db.getAllUsers();
-        listView.setAdapter(new ListAdapterUserAdmin(getActivity().getApplicationContext() ,userList, getActivity()));
+        if(userList.size() == 0) {
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            listView.setAdapter(new ListAdapterUserAdmin(getActivity().getApplicationContext() ,userList, getActivity()));
+        }
     }
 }

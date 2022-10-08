@@ -6,6 +6,12 @@ public class ModelProduct {
     String _stockLeft;
     String _category;
     boolean _isAddedToCart;
+    int _quantity;
+    int _cartId;
+    int _orderId;
+    String _createdAt;
+    String _status;
+    String _userName;
 
     public ModelProduct() {}
 
@@ -39,5 +45,47 @@ public class ModelProduct {
     }
     public boolean getIsAddedToCart() {
         return _isAddedToCart;
+    }
+
+    public void setQuantity(int quantity) {
+        this._quantity = quantity;
+    }
+    public int getQuantity() {
+        return _quantity;
+    }
+
+    public void setCartId(int cartId) {
+        this._cartId = cartId;
+    }
+    public int getCartId() {
+        return _cartId;
+    }
+
+    public void setStatus(String status) {
+        this._status = status;
+    }
+    public String getStatus() {
+        return _status;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this._createdAt = createdAt;
+    }
+    public String getCreatedAt() {
+        return _createdAt;
+    }
+
+    public void setOrderId(int orderId) {
+        this._orderId = orderId;
+    }
+    public int getOrderId() {
+        return _orderId;
+    }
+
+    public void setUserName(String userName) {
+        this._userName = userName;
+    }
+    public String getUserName() {
+        return _userName;
     }
 }

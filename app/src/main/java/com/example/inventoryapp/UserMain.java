@@ -67,18 +67,23 @@ public class UserMain extends AppCompatActivity  implements NavigationView.OnNav
         switch (item.getItemId()) {
             case R.id.nav_user_profile:
                 loadFragment(new UserProfileFragment());
+                setLayoutTitle("User Profile");
                 break;
             case R.id.nav_home:
                 loadFragment(new UserLandingFragment());
+                setLayoutTitle("User Dashboard");
                 break;
             case R.id.item_list:
                 loadFragment(new UserItemList());
+                setLayoutTitle("Item List");
                 break;
             case R.id.nav_order_history:
                 loadFragment(new UserOrderListFragment());
+                setLayoutTitle("Order History");
                 break;
             case R.id.nav_cart:
                 loadFragment(new UserCartFragment());
+                setLayoutTitle("Cart Page");
                 break;
             case R.id.nav_logout:
                 SharedPreferences sn = getSharedPreferences("userId", MODE_PRIVATE);

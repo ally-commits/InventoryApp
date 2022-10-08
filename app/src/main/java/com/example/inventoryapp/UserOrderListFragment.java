@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +27,9 @@ public class UserOrderListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    DataBaseHelper db;
+    private static UserOrderListFragment instance = null;
 
     public UserOrderListFragment() {
         // Required empty public constructor
@@ -46,6 +53,9 @@ public class UserOrderListFragment extends Fragment {
         return fragment;
     }
 
+    public static UserOrderListFragment getInstance() {
+        return instance;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +63,31 @@ public class UserOrderListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
+        instance = this;
     }
 
+    ListView listView;
+    LinearLayout notFound;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_order_list, container, false);
+        View v =  inflater.inflate(R.layout.fragment_user_order_list, container, false);
+        listView = v.findViewById(R.id.listView);
+        notFound = v.findViewById(R.id.notFound);
+
+        showRecords();
+        return v;
+    }
+    public void showRecords() {
+        int userId = ((UserMain)getActivity()).getActiveUserId();
+        ArrayList<ModelProduct> itemList = db.getAllUserOrders(userId);
+        if(itemList.size() == 0) {
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            listView.setAdapter(new ListAdapterOrderUser(getActivity().getApplicationContext(), itemList, getActivity()));
+        }
     }
 }

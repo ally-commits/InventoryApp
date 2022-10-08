@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class AdminCategoryList extends Fragment {
         instance = this;
     }
     ListView listView;
+    LinearLayout notFound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +67,8 @@ public class AdminCategoryList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin_category_list, container, false);
         Button btn = (Button) view.findViewById(R.id.add_category);
         listView = (ListView) view.findViewById(R.id.listView);
+        notFound = (LinearLayout) view.findViewById(R.id.notFound);
+
         showRecords();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +84,12 @@ public class AdminCategoryList extends Fragment {
 
     public void showRecords() {
         ArrayList<ModelCategory> catList = db.getAllCategory();
-        listView.setAdapter(new ListAdapterCategoryAdmin( getActivity().getApplicationContext() ,catList, getActivity()));
+        if(catList.size() == 0) {
+            notFound.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            notFound.setVisibility(LinearLayout.GONE);
+            listView.setAdapter(new ListAdapterCategoryAdmin( getActivity().getApplicationContext() ,catList, getActivity()));
+        }
+
     }
 }

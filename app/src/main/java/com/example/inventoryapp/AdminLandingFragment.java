@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +26,7 @@ public class AdminLandingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    DataBaseHelper db;
 
     public AdminLandingFragment() {
         // Required empty public constructor
@@ -53,12 +57,24 @@ public class AdminLandingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        db = new DataBaseHelper(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_landing, container, false);
+        View v =  inflater.inflate(R.layout.fragment_admin_landing, container, false);
+
+        TextView approved = v.findViewById(R.id.approved);
+        TextView rejected = v.findViewById(R.id.rejected);
+        TextView pending = v.findViewById(R.id.pending);
+
+        ArrayList<Integer> arr = db.getAdminDashboard();
+        pending.setText(String.valueOf(arr.get(0)));
+        approved.setText(String.valueOf(arr.get(1)));
+        rejected.setText(String.valueOf(arr.get(2)));
+
+        return v;
     }
 }

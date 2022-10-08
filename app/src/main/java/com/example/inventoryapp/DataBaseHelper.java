@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
@@ -351,8 +354,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
 
-//            db.delete(TABLE_NAME_CARTS, CART_KEY_USER_ID+ " = ?", new String[] {String.valueOf("2")});
-
             return cursor.getCount();
         }
 
@@ -363,10 +364,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " IN (SELECT " + CART_KEY_PRODUCT_ID + " FROM " + TABLE_NAME_CARTS
                     + " AS B WHERE " + CART_KEY_USER_ID + " = " + userId + " AND A." + CART_KEY_PRODUCT_ID + " = B." + CART_KEY_PRODUCT_ID + ")";
 
-
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
-
 
             if(cursor.moveToFirst()) {
                 do {
@@ -383,4 +382,194 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             return recordList;
         }
+
+        public ArrayList<ModelProduct> getAllCartItems(int userId) {
+            ArrayList<ModelProduct> recordList = new ArrayList<>();
+            String selectQuery = "SELECT * FROM " + TABLE_NAME_PRODUCTS + " JOIN " + TABLE_NAME_CARTS + " AS A ON "
+                    + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " IN (SELECT " + CART_KEY_PRODUCT_ID + " FROM " + TABLE_NAME_CARTS
+                    + " AS B WHERE " + CART_KEY_USER_ID + " = " + userId + " AND A." + CART_KEY_PRODUCT_ID + " = B." + CART_KEY_PRODUCT_ID + ")";
+
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+            if(cursor.moveToFirst()) {
+                do {
+                    ModelProduct record = new ModelProduct();
+                    record.setId(Integer.parseInt(cursor.getString(0)));
+                    record.setName(cursor.getString(1));
+                    record.setStockLeft(cursor.getString(2));
+                    record.setCategory(cursor.getString(3));
+                    record.setCartId(cursor.getInt(4));
+                    record.setQuantity(cursor.getInt(5));
+
+                    recordList.add(record);
+                } while(cursor.moveToNext());
+            }
+
+            return recordList;
+        }
+
+        public ArrayList<ModelProduct> getAllAdminOrders() {
+            ArrayList<ModelProduct> recordList = new ArrayList<>();
+            String selectQuery = "SELECT * FROM " + TABLE_NAME_PRODUCTS + "," + TABLE_NAME_ORDERS + "," + TABLE_NAME_USERS + " WHERE "
+                    + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " = " + TABLE_NAME_ORDERS + "." + ORDER_KEY_PRODUCT_ID + " AND "
+                    + TABLE_NAME_ORDERS + "." + ORDER_KEY_USER_ID + " = " + TABLE_NAME_USERS + "." + USER_KEY_ID + " ORDER BY "
+                    + TABLE_NAME_ORDERS + "." + ORDER_KEY_ID + " DESC";
+
+            Log.d("LOGGG", "getAllAdminOrders: " + selectQuery);
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+            if(cursor.moveToFirst()) {
+                do {
+                    ModelProduct record = new ModelProduct();
+                    record.setId(Integer.parseInt(cursor.getString(0)));
+                    record.setName(cursor.getString(1));
+                    record.setStockLeft(cursor.getString(2));
+                    record.setCategory(cursor.getString(3));
+                    record.setOrderId(cursor.getInt(4));
+                    record.setQuantity(cursor.getInt(5));
+                    record.setStatus(cursor.getString(6));
+                    record.setCreatedAt(cursor.getString(7));
+                    record.setUserName(cursor.getString(11));
+
+                    recordList.add(record);
+                } while(cursor.moveToNext());
+            }
+
+            return recordList;
+        }
+
+        public ArrayList<ModelProduct> getAllUserOrders(int userId) {
+            ArrayList<ModelProduct> recordList = new ArrayList<>();
+            String selectQuery = "SELECT * FROM " + TABLE_NAME_PRODUCTS + "," + TABLE_NAME_ORDERS + " WHERE "
+                    + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " = " + TABLE_NAME_ORDERS + "." + ORDER_KEY_PRODUCT_ID + " AND "
+                    + TABLE_NAME_ORDERS + "." + ORDER_KEY_USER_ID + " = " + userId +  " ORDER BY "
+                    + TABLE_NAME_ORDERS + "." + ORDER_KEY_ID + " DESC";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+            if(cursor.moveToFirst()) {
+                do {
+                    ModelProduct record = new ModelProduct();
+                    record.setId(Integer.parseInt(cursor.getString(0)));
+                    record.setName(cursor.getString(1));
+                    record.setStockLeft(cursor.getString(2));
+                    record.setCategory(cursor.getString(3));
+                    record.setOrderId(cursor.getInt(4));
+                    record.setQuantity(cursor.getInt(5));
+                    record.setStatus(cursor.getString(6));
+                    record.setCreatedAt(cursor.getString(7)); ;
+
+                    recordList.add(record);
+                } while(cursor.moveToNext());
+            }
+
+            return recordList;
+        }
+
+        public ArrayList<Integer> getUserDashboard(int userId) {
+            ArrayList<Integer> arr = new ArrayList<Integer>();
+            String selectQueryP = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'PENDING' AND " + ORDER_KEY_USER_ID + " = " + userId;
+            String selectQueryA = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'APPROVED' AND " + ORDER_KEY_USER_ID + " = " + userId;
+            String selectQueryR = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'REJECTED' AND " + ORDER_KEY_USER_ID + " = " + userId;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursorP = db.rawQuery(selectQueryP, null);
+            Cursor cursorA = db.rawQuery(selectQueryA, null);
+            Cursor cursorR = db.rawQuery(selectQueryR, null);
+
+            arr.add(cursorP.getCount());
+            arr.add(cursorA.getCount());
+            arr.add(cursorR.getCount());
+
+            return arr;
+        }
+
+        public ArrayList<Integer> getAdminDashboard() {
+            ArrayList<Integer> arr = new ArrayList<Integer>();
+            String selectQueryP = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'PENDING'";
+            String selectQueryA = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'APPROVED'";
+            String selectQueryR = "SELECT * FROM " + TABLE_NAME_ORDERS + " WHERE " + ORDER_KEY_STATUS + " = 'REJECTED'";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursorP = db.rawQuery(selectQueryP, null);
+            Cursor cursorA = db.rawQuery(selectQueryA, null);
+            Cursor cursorR = db.rawQuery(selectQueryR, null);
+
+            arr.add(cursorP.getCount());
+            arr.add(cursorA.getCount());
+            arr.add(cursorR.getCount());
+
+            return arr;
+        }
+
+        public int updateQuantity(int cartId, int quantity) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(CART_KEY_QTY, quantity);
+
+            return db.update(TABLE_NAME_CARTS, values, CART_KEY_ID + "=?", new String[] { String.valueOf(cartId)});
+        }
+
+        public void deleteCartItem(int cartId) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(TABLE_NAME_CARTS, CART_KEY_ID+ " = ?", new String[] {String.valueOf(cartId)});
+
+            db.close();
+        }
+        private String getDateTime() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = new Date();
+            return dateFormat.format(date);
+        }
+
+        public void placeOrder(int userId) {
+            String selectQuery = "SELECT * FROM " + TABLE_NAME_PRODUCTS + " JOIN " + TABLE_NAME_CARTS + " AS A ON "
+                    + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " IN (SELECT " + CART_KEY_PRODUCT_ID + " FROM " + TABLE_NAME_CARTS
+                    + " AS B WHERE " + CART_KEY_USER_ID + " = " + userId + " AND A." + CART_KEY_PRODUCT_ID + " = B." + CART_KEY_PRODUCT_ID + ")";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if(cursor.moveToFirst()) {
+                do {
+                    ContentValues values = new ContentValues();
+                    values.put(ORDER_KEY_QTY , cursor.getInt(5));
+                    values.put(ORDER_KEY_USER_ID , userId);
+                    values.put(ORDER_KEY_PRODUCT_ID , cursor.getInt(0));
+                    values.put(ORDER_KEY_STATUS, "PENDING");
+                    values.put(ORDER_KEY_CREATED_AT, getDateTime());
+                    db.insert(TABLE_NAME_ORDERS, null, values);
+
+
+                } while(cursor.moveToNext());
+            }
+            db.delete(TABLE_NAME_CARTS, CART_KEY_USER_ID+ " = ?", new String[] {String.valueOf(userId)});
+        }
+
+    public int updateOrderStatus(int orderId, int productId, String status, int stockLeft) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ORDER_KEY_STATUS, status);
+        db.update(TABLE_NAME_ORDERS, values, ORDER_KEY_ID + "=?", new String[] { String.valueOf(orderId)});
+
+
+        if(status.equals("APPROVED")) {
+            values = new ContentValues();
+            values.put(PRODUCT_KEY_STOCK_LEFT, stockLeft);
+            db.update(TABLE_NAME_PRODUCTS, values, PRODUCT_KEY_ID + "=?", new String[] { String.valueOf(productId)});
+        }
+
+        return 1;
+    }
 }
