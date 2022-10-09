@@ -6,12 +6,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.ArrayList;
  * Use the {@link UserItemList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserItemList extends Fragment {
+public class UserItemList extends Fragment implements AdapterView.OnItemSelectedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +38,9 @@ public class UserItemList extends Fragment {
 
     DataBaseHelper db;
     private static UserItemList instance = null;
+    String[] categories;
+    int[] catIndex;
+    int defaultCatId;
 
 
     public UserItemList() {
@@ -69,16 +76,35 @@ public class UserItemList extends Fragment {
     TextView cartCountView;
     Button goToCart;
     LinearLayout notFound;
+    Spinner spinElement;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_user_item_list, container, false);
+        int count=0;
+        ArrayList<ModelCategory> arrList = db.getAllCategory();
+        categories = new String[arrList.size()];
+        catIndex = new int[arrList.size()];
+
+        for (ModelCategory cat : arrList) {
+            categories[count] = cat.getName();
+            catIndex[count++] = cat.getId();
+            defaultCatId = cat.getId();
+        }
+
         listView = v.findViewById(R.id.listView);
+        spinElement = v.findViewById(R.id.spinner);
         bottomLayout = v.findViewById(R.id.bottomLayout);
         cartCountView = v.findViewById(R.id.cartCount);
         goToCart = v.findViewById(R.id.goToCart);
         notFound = v.findViewById(R.id.notFound);
+
+        ArrayAdapter arrayAdap = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+        arrayAdap.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinElement.setAdapter(arrayAdap);
+        spinElement.setOnItemSelectedListener(this);
 
         goToCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +113,6 @@ public class UserItemList extends Fragment {
             }
         });
 
-        showRecords();
         return v;
     }
 
@@ -96,10 +121,22 @@ public class UserItemList extends Fragment {
         return (int) (dp * scale + 0.5f);
     }
 
+    public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
+        showRecords(catIndex[i]);
+        defaultCatId = catIndex[i];
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-    public void showRecords() {
+    }
+
+    public void showRecords(int...arr) {
         int userId = ((UserMain)getActivity()).getActiveUserId();
+        int categoryId = defaultCatId;
+        if(arr.length > 0) {
+            categoryId = arr[0];
+        }
 
         int cartCount = db.getCartItemsCount(userId);
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
@@ -114,7 +151,7 @@ public class UserItemList extends Fragment {
 
         listView.setLayoutParams(layoutParams);
 
-        ArrayList<ModelProduct> itemList = db.getAllProductForUser(userId);
+        ArrayList<ModelProduct> itemList = db.getAllProductForUser(userId,categoryId);
         if(itemList.size() == 0) {
             notFound.setVisibility(LinearLayout.VISIBLE);
         } else {

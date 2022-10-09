@@ -6,61 +6,15 @@
     tools:context=".UserItemList">
 
 
-    <HorizontalScrollView
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:scrollbarThumbHorizontal="@color/white"
-        android:layout_height="60dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="match_parent">
-            <Button
-                android:layout_width="wrap_content"
-                android:text="Stationary Items"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_height="40dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:text="Books"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginRight="10dp"
-                android:layout_height="40dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:text="Note"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginRight="10dp"
-                android:layout_height="40dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:text="Paper"
-                android:layout_gravity="center"
-                android:textColor="@color/white" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:text="Pen"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginRight="10dp"
-                android:layout_height="40dp" />
-        </LinearLayout>
-    </HorizontalScrollView>
+        android:layout_margin="10dp"
+        android:layout_height="50dp" />
 
     <LinearLayout
         android:id="@+id/notFound"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="wrap_content">
@@ -83,7 +37,7 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="80dp"
         android:layout_height="wrap_content" />
 

@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_admin_profile.xml" value="0.2439117431640625" />
         <entry key="app/src/main/res/layout/fragment_admin_user_list.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/fragment_user_cart.xml" value="0.2546875" />
-        <entry key="app/src/main/res/layout/fragment_user_item_list.xml" value="0.14951019287109374" />
+        <entry key="app/src/main/res/layout/fragment_user_item_list.xml" value="0.21758880615234377" />
         <entry key="app/src/main/res/layout/fragment_user_landing.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_user_order_list.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.11354166666666667" />
@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/layout/listproductuser.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/listuseradmin.xml" value="0.33035278320312506" />
         <entry key="app/src/main/res/layout/listusercart.xml" value="0.2546875" />
+        <entry key="app/src/main/res/layout/listusercategory.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/listuserorder.xml" value="0.240625" />
         <entry key="app/src/main/res/menu/adminmenu.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.2526041666666667" />

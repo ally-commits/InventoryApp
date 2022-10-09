@@ -358,11 +358,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
 
-        public ArrayList<ModelProduct> getAllProductForUser(int userId) {
+        public ArrayList<ModelProduct> getAllProductForUser(int userId, int categoryId) {
             ArrayList<ModelProduct> recordList = new ArrayList<>();
             String selectQuery = "SELECT * FROM " + TABLE_NAME_PRODUCTS + " LEFT JOIN " + TABLE_NAME_CARTS + " AS A ON "
                     + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_ID + " IN (SELECT " + CART_KEY_PRODUCT_ID + " FROM " + TABLE_NAME_CARTS
-                    + " AS B WHERE " + CART_KEY_USER_ID + " = " + userId + " AND A." + CART_KEY_PRODUCT_ID + " = B." + CART_KEY_PRODUCT_ID + ")";
+                    + " AS B WHERE " + CART_KEY_USER_ID + " = " + userId + " AND A." + CART_KEY_PRODUCT_ID + " = B." + CART_KEY_PRODUCT_ID + ")"
+                    + " WHERE " + TABLE_NAME_PRODUCTS + "." + PRODUCT_KEY_CATEGORY + " = " + categoryId;
+
+            Log.d("CHCHCH", "getAllProductForUser: " + selectQuery);
 
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
