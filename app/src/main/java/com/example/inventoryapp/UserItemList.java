@@ -154,6 +154,7 @@ public class UserItemList extends Fragment implements AdapterView.OnItemSelected
         ArrayList<ModelProduct> itemList = db.getAllProductForUser(userId,categoryId);
         if(itemList.size() == 0) {
             notFound.setVisibility(LinearLayout.VISIBLE);
+            listView.setAdapter(new ListAdapterProductUser(getActivity().getApplicationContext() ,itemList, getActivity()));
         } else {
             notFound.setVisibility(LinearLayout.GONE);
             listView.setAdapter(new ListAdapterProductUser(getActivity().getApplicationContext() ,itemList, getActivity()));

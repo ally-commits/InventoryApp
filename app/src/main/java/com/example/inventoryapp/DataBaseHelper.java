@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
-        private static final String DATABASE_NAME = "app4";
+        private static final String DATABASE_NAME = "inventory1";
 
         private static final String TABLE_NAME_CATEGORY = "category";
         private static final String CATEGORY_KEY_ID = "id";
@@ -90,6 +90,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_CONTACTS_TABLE3);
             db.execSQL(CREATE_CONTACTS_TABLE4);
             db.execSQL(CREATE_CONTACTS_TABLE5);
+
+            addDefaultDataUser(
+                    db,
+                    new ModelUser(
+                    "Admin",
+                    "9900990099",
+                    "Asd@1234",
+                    "ADMIN")
+            );
         }
         public void onUpgrade(SQLiteDatabase db, int oldVersion,int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CATEGORY);
@@ -246,6 +255,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             db.insert(TABLE_NAME_USERS, null, values);
             db.close();
+        }
+
+        void addDefaultDataUser(SQLiteDatabase db, ModelUser user) {
+            ContentValues values = new ContentValues();
+
+            values.put(USER_KEY_NAME , user._name);
+            values.put(USER_KEY_PH_NO , user._phoneNumber);
+            values.put(USER_KEY_PASSWORD , user._password);
+            values.put(USER_KEY_TYPE, user._userType);
+
+            db.insert(TABLE_NAME_USERS, null, values);
         }
 
         public ArrayList<ModelUser> getAllUsers() {
