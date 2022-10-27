@@ -18,8 +18,8 @@
         <entry key="app/src/main/res/layout/fragment_admin_category_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_admin_conf_item.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_admin_conf_user.xml" value="0.2546875" />
-        <entry key="app/src/main/res/layout/fragment_admin_item_list.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_admin_landing.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_admin_item_list.xml" value="0.21193695068359375" />
+        <entry key="app/src/main/res/layout/fragment_admin_landing.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_admin_order_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_admin_profile.xml" value="0.2439117431640625" />
         <entry key="app/src/main/res/layout/fragment_admin_user_list.xml" value="0.2546875" />

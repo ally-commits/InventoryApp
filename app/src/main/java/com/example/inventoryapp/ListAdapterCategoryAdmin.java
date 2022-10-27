@@ -38,6 +38,7 @@ public class ListAdapterCategoryAdmin extends BaseAdapter {
         Button editBtn;
         Button deleteBtn;
     }
+
     public View getView(final int position, View v, ViewGroup vg) {
         ViewHolder holder;
 

@@ -94,7 +94,6 @@ public class AdminConfItemFragment extends Fragment implements AdapterView.OnIte
             arrIds[i] = catList.get(i).getId();
 
             if(type.equals("EDIT") && Integer.valueOf(product.getCategory()) == catList.get(i).getId()) {
-                Log.d("DTAG", "FOUND INDEX: " + i);
                 defaultCatIndex = i;
             }
         }
@@ -151,7 +150,7 @@ public class AdminConfItemFragment extends Fragment implements AdapterView.OnIte
     }
     public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
         if(type.equals("NONE") || counter > 0) {
-            Log.d("DTAG", "onItemSelected: ");
+            Log.d("DTAG", "onItemSelected: " + arrIds[i]);
             selectedCategory = arrIds[i];
         }
         counter++;

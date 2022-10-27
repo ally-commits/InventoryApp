@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
-        private static final String DATABASE_NAME = "inventory1";
+        private static final String DATABASE_NAME = "inventory2";
 
         private static final String TABLE_NAME_CATEGORY = "category";
         private static final String CATEGORY_KEY_ID = "id";

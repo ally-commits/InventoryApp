@@ -22,19 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         db = new DataBaseHelper(getApplicationContext());
 
-//        db.addUser(new ModelUser(
-//            "Admin",
-//            "8147953531",
-//            "Asd@1234",
-//            "ADMIN"
-//        ));
-
         SharedPreferences sh = getSharedPreferences("userId",MODE_PRIVATE);
         int userId = sh.getInt("userId",-1);
 
         if(userId > 0) {
             ModelUser user = db.getUser(userId);
-            Log.d("UTAG", "onCreate: " + user._userType);
+
             if(user.getUserType() != null && user.getUserType().equals("ADMIN")) {
                 redirectAdminLanding();
             } else if(user.getUserType() != null && user.getUserType().equals("USER")) {
